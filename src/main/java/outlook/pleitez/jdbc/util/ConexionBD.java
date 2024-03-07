@@ -7,7 +7,7 @@ public class ConexionBD {
     private static String url = "jdbc:mysql://localhost:3306/java_curso";
     private static String username = "root";
     private static String password = "root";
-    private static Connection connection = null;
+    private static Connection connection;
 
     public static Connection getInstance() throws Exception{
         if(connection == null){
