@@ -15,7 +15,9 @@ public class EjemploJDBC {
         {
             //Se deja una sola conexion con la BD para toda la aplicacion facilitara el close(); (Pendiente creo)
             RepositorioGeneric<Producto> repositorio = new ProductoRepoImplement();
-            repositorio.listar().forEach(p -> System.out.println(p.getNombre()));
+            repositorio.listar().forEach(System.out::println); //Abreviando impresion en consola
+
+            System.out.println(repositorio.porId(2L));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

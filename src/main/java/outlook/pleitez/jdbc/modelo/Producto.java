@@ -17,6 +17,17 @@ public class Producto {
         this.fechaRegistro = fechaRegistro;
     }
 
+    @Override
+    public String toString() {
+        return id_producto +
+                " | " +
+                nombre +
+                " | " +
+                precio +
+                " | " +
+                fechaRegistro;
+    }
+
     public long getId_producto() {
         return id_producto;
     }
