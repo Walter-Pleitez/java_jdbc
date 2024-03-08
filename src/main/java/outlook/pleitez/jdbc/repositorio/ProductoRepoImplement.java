@@ -16,6 +16,7 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
         return ConexionBD.getInstance();
     }
 
+    //IMPLEMENTACION DE METODOS BASICOS PARA EL CRUD
     @Override
     public List<Producto> listar() {
         List<Producto> productos = new ArrayList<>();
