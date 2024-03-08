@@ -31,12 +31,12 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
                 p.setFechaRegistro(rs.getDate("fecha_registro"));
                 productos.add(p);
             }
-
+            //Aquí podría llevar un "SQLException e" con su "e.PrintStackTrace();"
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        return null;
+        return productos;
     }
 
     @Override
