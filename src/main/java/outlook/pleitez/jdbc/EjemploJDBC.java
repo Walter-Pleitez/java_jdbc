@@ -1,5 +1,5 @@
 package outlook.pleitez.jdbc;
-
+//Codigo antes de que se hiciera un invento de copiar y pegar el proyecto, cosa que no funciono siguiendo intrucciones
 import outlook.pleitez.jdbc.modelo.Categoria;
 import outlook.pleitez.jdbc.modelo.Producto;
 import outlook.pleitez.jdbc.repositorio.ProductoRepoImplement;
