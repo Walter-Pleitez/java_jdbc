@@ -5,30 +5,29 @@ import outlook.pleitez.jdbc.repositorio.ProductoRepoImplement;
 import outlook.pleitez.jdbc.repositorio.RepositorioGeneric;
 import outlook.pleitez.jdbc.util.ConexionBD;
 
-import java.sql.*;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-public class EjemploJDBC {
+public class EjemploJDBCUpdate {
     public static void main(String[] args) {
 
         try (Connection conn = ConexionBD.getInstance())
         {
             //Se deja una sola conexion con la BD para toda la aplicacion facilitara el close(); (Pendiente creo)
             RepositorioGeneric<Producto> repositorio = new ProductoRepoImplement();
-
             System.out.println("========== Listar ==========");
             repositorio.listar().forEach(System.out::println); //Abreviando impresion en consola
 
             System.out.println("========== Obtener por Id ==========");
             System.out.println(repositorio.porId(1L));
 
-            System.out.println("========== Insertar nuevo producto ==========");
+            System.out.println("========== Editar producto ==========");
             Producto producto = new Producto();
-            producto.setNombre("Perfume");
-            producto.setPrecio(10);
-            producto.setFechaRegistro(new Date());
+            producto.setId_producto(3L);
+            producto.setNombre("Cera Liquida");
+            producto.setPrecio(5);
             repositorio.guardar(producto);
-            System.out.println("Producto guardado con exito");
+            System.out.println("Producto actualizado con exito");
             repositorio.listar().forEach(System.out::println);
 
         } catch (SQLException e) {

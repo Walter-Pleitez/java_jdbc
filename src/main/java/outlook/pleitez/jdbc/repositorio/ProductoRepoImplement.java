@@ -55,7 +55,7 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
     public void guardar(Producto producto) {
         String sql;
         if (producto.getId_producto() > 0) {
-            sql = "UPDATE producto SET nombre = ?, precio = ? WHERE id = ?";
+            sql = "UPDATE producto SET nombre = ?, precio = ? WHERE id_producto = ?";
         } else {
             sql = "INSERT INTO producto(nombre, precio, fecha_registro) VALUES (?, ?, ?)";
         }
@@ -82,7 +82,7 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
 
     @Override
     public void eliminar(Long id_producto) {
-        try(PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM producto WHERE id = ?")){
+        try(PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM producto WHERE id_producto = ?")){
             stmt.setLong(1, id_producto);
         } catch (SQLException e) {
             throw new RuntimeException(e);
