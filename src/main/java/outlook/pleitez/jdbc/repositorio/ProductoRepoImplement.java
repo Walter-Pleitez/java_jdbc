@@ -37,11 +37,11 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
         try(PreparedStatement stmt = getConnection().
                         prepareStatement("SELECT * FROM producto WHERE id_producto = ?")) {
             stmt.setLong(1, id_producto);
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                producto = getProducto(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    producto = getProducto(rs);
+                }
             }
-            rs.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -53,12 +53,42 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
 
     @Override
     public void guardar(Producto producto) {
+        String sql;
+        if (producto.getId_producto() > 0) {
+            sql = "UPDATE producto SET nombre = ?, precio = ? WHERE id = ?";
+        } else {
+            sql = "INSERT INTO producto(nombre, precio, fecha_registro) VALUES (?, ?, ?)";
+        }
+
+        try(PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, producto.getNombre());
+            stmt.setLong(2, producto.getPrecio());
+
+            if (producto.getId_producto() > 0) {
+                stmt.setLong(3, producto.getId_producto());
+            }
+            else{
+                stmt.setDate(3, new Date(producto.getFechaRegistro().getTime()));
+            }
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @Override
     public void eliminar(Long id_producto) {
-
+        try(PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM producto WHERE id = ?")){
+            stmt.setLong(1, id_producto);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //METODO CREADO CON Extract Method para reutlizar codigo de los metodos del CRUD
