@@ -1,11 +1,13 @@
 package outlook.pleitez.jdbc;
 
+import outlook.pleitez.jdbc.modelo.Categoria;
 import outlook.pleitez.jdbc.modelo.Producto;
 import outlook.pleitez.jdbc.repositorio.ProductoRepoImplement;
 import outlook.pleitez.jdbc.repositorio.RepositorioGeneric;
 import outlook.pleitez.jdbc.util.ConexionBD;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class EjemploJDBC {
@@ -24,9 +26,12 @@ public class EjemploJDBC {
 
             System.out.println("========== Insertar nuevo producto ==========");
             Producto producto = new Producto();
-            producto.setNombre("Perfume");
-            producto.setPrecio(10);
+            producto.setNombre("Perfume recargado");
+            producto.setPrecio(12);
             producto.setFechaRegistro(new Date());
+            Categoria categoria = new Categoria();
+            categoria.setId_categorias(2L);
+            producto.setCategoria(categoria);
             repositorio.guardar(producto);
             System.out.println("Producto guardado con exito");
             repositorio.listar().forEach(System.out::println);

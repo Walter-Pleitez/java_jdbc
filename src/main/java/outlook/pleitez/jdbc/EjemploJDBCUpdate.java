@@ -1,5 +1,6 @@
 package outlook.pleitez.jdbc;
 
+import outlook.pleitez.jdbc.modelo.Categoria;
 import outlook.pleitez.jdbc.modelo.Producto;
 import outlook.pleitez.jdbc.repositorio.ProductoRepoImplement;
 import outlook.pleitez.jdbc.repositorio.RepositorioGeneric;
@@ -24,8 +25,11 @@ public class EjemploJDBCUpdate {
             System.out.println("========== Editar producto ==========");
             Producto producto = new Producto();
             producto.setId_producto(3L);
-            producto.setNombre("Cera Liquida");
-            producto.setPrecio(5);
+            producto.setNombre("Cera Liquida litro");
+            producto.setPrecio(2);
+            Categoria categoria = new Categoria();
+            categoria.setId_categorias(3L);
+            producto.setCategoria(categoria);
             repositorio.guardar(producto);
             System.out.println("Producto actualizado con exito");
             repositorio.listar().forEach(System.out::println);

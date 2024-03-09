@@ -1,5 +1,6 @@
 package outlook.pleitez.jdbc.repositorio;
 
+import outlook.pleitez.jdbc.modelo.Categoria;
 import outlook.pleitez.jdbc.modelo.Producto;
 import outlook.pleitez.jdbc.util.ConexionBD;
 
@@ -19,7 +20,9 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
         List<Producto> productos = new ArrayList<>();
         try {
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM producto");
+            ResultSet rs = stmt.executeQuery("SELECT p.*, c.nombre AS categoria FROM producto AS p " +
+                    "INNER JOIN categorias AS c ON (p.categoria_id = c.id_categorias)");
+
             while(rs.next()){
                 Producto p = getProducto(rs); //crearProducto(rs); con refactor Extract Method
                 productos.add(p);
@@ -35,7 +38,11 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
     public Producto porId(Long id_producto) {
         Producto producto = null;
         try(PreparedStatement stmt = getConnection().
-                        prepareStatement("SELECT * FROM producto WHERE id_producto = ?")) {
+                        prepareStatement("SELECT p.*, c.nombre AS categoria FROM producto AS p " +
+                                "INNER JOIN categorias AS c ON (p.categoria_id = c.id_categorias) " +
+                                "WHERE id_producto = ?")
+        )
+        {
             stmt.setLong(1, id_producto);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -55,20 +62,21 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
     public void guardar(Producto producto) {
         String sql;
         if (producto.getId_producto() > 0) {
-            sql = "UPDATE producto SET nombre = ?, precio = ? WHERE id_producto = ?";
+            sql = "UPDATE producto SET nombre = ?, precio = ?, categoria_id = ? WHERE id_producto = ?";
         } else {
-            sql = "INSERT INTO producto(nombre, precio, fecha_registro) VALUES (?, ?, ?)";
+            sql = "INSERT INTO producto(nombre, precio, categoria_id, fecha_registro) VALUES (?, ?, ?, ?)";
         }
 
         try(PreparedStatement stmt = getConnection().prepareStatement(sql)) {
             stmt.setString(1, producto.getNombre());
             stmt.setLong(2, producto.getPrecio());
+            stmt.setLong(3, producto.getCategoria().getId_categorias());
 
             if (producto.getId_producto() > 0) {
-                stmt.setLong(3, producto.getId_producto());
+                stmt.setLong(4, producto.getId_producto());
             }
             else{
-                stmt.setDate(3, new Date(producto.getFechaRegistro().getTime()));
+                stmt.setDate(4, new Date(producto.getFechaRegistro().getTime()));
             }
 
             stmt.executeUpdate();
@@ -98,6 +106,10 @@ public class ProductoRepoImplement implements RepositorioGeneric<Producto>{
         p.setNombre(rs.getString("nombre"));
         p.setPrecio(rs.getInt("precio"));
         p.setFechaRegistro(rs.getDate("fecha_registro"));
+        Categoria categoria = new Categoria();
+        categoria.setId_categorias(rs.getLong("categoria_id"));
+        categoria.setNombre(rs.getString("categoria"));
+        p.setCategoria(categoria);
         return p;
     }
 }
